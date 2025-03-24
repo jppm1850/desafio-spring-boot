@@ -1,0 +1,19 @@
+# Configuración específica para pruebas
+spring.r2dbc.url=r2dbc:h2:mem:///test_db;DB_CLOSE_DELAY=-1;MODE=MYSQL
+spring.r2dbc.username=sa
+spring.r2dbc.password=
+
+# Deshabilitar CSRF para pruebas
+spring.security.csrf.enabled=false
+
+# Llave JWT para pruebas
+jwt.secret=claveSecretaParaPruebasUnitariasJwtTokenSeguroTest
+jwt.expiration=3600000
+
+# Logging para pruebas
+logging.level.root=WARN
+logging.level.org.springframework.security=DEBUG
+logging.level.com.spa=DEBUG
+
+# Deshabilitar Swagger UI para pruebas
+springdoc.swagger-ui.enabled=false

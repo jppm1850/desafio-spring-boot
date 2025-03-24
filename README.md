@@ -1,72 +1,318 @@
-# Desafío Técnico: Gestión de Tareas con Spring Boot y Java
+# Gestión de Tareas - NUEVO SPA
 
-La empresa NUEVO SPA desea desarrollar una plataforma de gestión de tareas para mejorar la productividad de sus equipos. El sistema debe permitir a los usuarios crear, actualizar, eliminar y listar tareas. Además, se requiere autenticación mediante JWT y documentación de la API utilizando OpenAPI y Swagger.
+Sistema de gestión de tareas desarrollado con Spring Boot WebFlux, JWT y H2.
 
-## Objetivo:
-Crear una API RESTful utilizando Spring Boot que gestione usuarios y tareas, aplicando buenas prácticas, principios SOLID y utilizando las tecnologías especificadas.
+## Desarrollador
+👤 **Junior Pedro Pecho Mendoza**  
+💼 **Software Engineer**
 
-## Requisitos Técnicos:
-### Java:
-- Utiliza Java 17 para la implementación.
-- Utiliza las características de Java 17, como lambdas y streams, cuando sea apropiado.
-- Utilizar Maven como gestor de dependencias
+## Características
 
-### Spring Boot 3.4.x:
-- Construye la aplicación utilizando Spring Boot 3.4.x (última versión disponible).
+- API RESTful reactiva utilizando Spring WebFlux
+- Persistencia reactiva con R2DBC
+- Autenticación mediante JWT
+- Base de datos H2 en memoria
+- Documentación con OpenAPI y Swagger
+- Generación de código API-First
 
-### Base de Datos:
+## Requisitos
 
-- Utiliza una base de datos H2.
-- Crea tres tablas: usuarios, tareas y estados_tarea.
-- La tabla usuarios debe contener datos pre cargados.
-- La tabla estados_tarea debe contener estados pre cargados.
+- Java 17
+- Maven 3.8+
 
-### JPA:
-- Implementa una capa de persistencia utilizando JPA para almacenar y recuperar las tareas.
+## Tecnologías utilizadas
 
-### JWT (JSON Web Token):
+- Spring Boot 3.4.x
+- Spring WebFlux
+- Spring Security
+- Spring Data R2DBC
+- JWT (JSON Web Token)
+- H2 Database
+- OpenAPI Generator
+- Lombok
 
-- Implementa la autenticación utilizando JWT para validar usuarios.
+## Configuración inicial
 
-### OpenAPI y Swagger:
+1. Clone el repositorio:
+   ```
+   git clone https://github.com/tu-usuario/ms-spa.git
+   cd ms-spa
+   ```
 
-- Documenta la API utilizando OpenAPI y Swagger.
+2. Compile el proyecto:
+   ```
+   mvn clean install
+   ```
 
-## Funcionalidades:
-### Autenticación:
-- Implementa un endpoint para la autenticación de usuarios utilizando JWT. 
+3. Ejecute la aplicación:
+   ```
+   mvn spring-boot:run
+   ```
 
-### CRUD de Tareas:
-- Implementa operaciones CRUD (Crear, Leer, Actualizar, Eliminar) para las tareas.
+4. Acceda a Swagger UI:
+   ```
+   http://localhost:8080/swagger-ui.html
+   ```
 
-## Consideraciones:
-### Seguridad:
-- Asegúrate de que las operaciones CRUD de tareas solo sean accesibles para usuarios autenticados.
+5. Acceda a Actuator:
+   ```
+   http://localhost:8080/actuator/health
+   ```
 
-### Documentación:
-- Utiliza OpenAPI y Swagger para documentar claramente la API.
-- Puntos adicionales si se genera el API mediante metodologia API First. Generar el archivo openapi.yml Nota: Ejemplo Plugin Maven groupId org.openapitools, artifactId openapi-generator-maven-plugin
+6. Acceda a la consola H2:
+   ```
+   http://localhost:8080/h2-console
+   ```
+   Datos de conexión:
+    - JDBC URL: jdbc:h2:mem:tareas_db
+    - Usuario: sa
+    - Contraseña: password
 
-### Código Limpio:
-- Escribe código ordenado, aplicando buenas prácticas y principios SOLID.
+## Estructura del proyecto
 
-### Creatividad
-- Se espera dada la descripción del problema se creen las entidades y metodos en consecuencia a lo solicitado.
+```
+src/main/java/com/spa/
+├── api/               # Endpoints generados por el openApi
+├── config/            # Configuraciones (Security, R2DBC, etc.)
+├── controller/        # Controladores REST
+├── model/             
+│   ├── dto/           # Data Transfer Objects (Modelos API), generados por el openApi
+│   └── entity/        # Entidades de dominio
+├── repository/        # Repositorios reactivos
+├── security/          # Componentes de seguridad y JWT
+├── service/           # Servicios de negocio
+└── MsSpaApplication.java  # Clase principal
+```
 
-## Entregables:
-### Repositorio de GitHub:
-- Realiza un Pull request a este repositorio indicando tu nombre, correo y cargo al que postulas.
-- Todos los PR serán rechazados, no es un indicador de la prueba.
+## API Endpoints
 
-### Documentación:
-- Incluye instrucciones claras sobre cómo ejecutar y probar la aplicación.
-- **Incluir Json de prueba en un archivo texto o mediante un proyecto postman** Nota: Si no va se restaran puntos de la evaluación
+### Autenticación
+- `POST /api/auth/login` - Autenticar usuario
 
-## Evaluación:
-Se evaluará la solución en función de los siguientes criterios:
+### Tareas
+- `GET /api/tareas` - Listar todas las tareas del usuario
+- `GET /api/tareas/{id}` - Obtener una tarea específica
+- `POST /api/tareas` - Crear una nueva tarea
+- `PUT /api/tareas/{id}` - Actualizar una tarea
+- `DELETE /api/tareas/{id}` - Eliminar una tarea
 
-- Correcta implementación de las funcionalidades solicitadas.
-- Aplicación de buenas prácticas de desarrollo, patrones de diseño y principios SOLID.
-- Uso adecuado de Java 17, Spring Boot 3.4.x, H2, JWT, OpenAPI y Swagger.
-- Claridad y completitud de la documentación.
-- **Puntos extras si la generación de la API se realizo mediante API First**
+### Estados
+- `GET /api/estados` - Listar todos los estados posibles
+
+## Usuarios preconfigurados
+
+| Usuario  | Contraseña  | Descripción                 |
+|----------|-------------|-----------------------------|
+| admin    | admin123    | Usuario administrador       |
+| usuario1 | password123 | Usuario estándar            |
+| usuario2 | password123 | Usuario estándar adicional  |
+
+## Ejemplo de uso con cURL
+
+1. Autenticación:
+```bash
+curl -X POST http://localhost:8080/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username":"admin","password":"admin123"}'
+```
+
+2. Listar tareas:
+```bash
+curl -X GET http://localhost:8080/api/tareas \
+  -H "Authorization: Bearer {token}"
+```
+
+3. Crear tarea:
+```bash
+curl -X POST http://localhost:8080/api/tareas \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer {token}" \
+  -d '{"titulo":"Nueva tarea","descripcion":"Descripción de la tarea","estadoId":1}'
+```
+
+## Colección Postman
+
+En el archivo `postman-collection.json` se incluye una colección de Postman para probar todos los endpoints de la API, y en el `postman-environment.json` se encuentran los enviroments. 
+
+## Características adicionales
+
+- **API First**: El proyecto utiliza generación de código a partir de especificaciones OpenAPI.
+- **Seguridad**: Todas las operaciones CRUD de tareas requieren autenticación mediante JWT.
+- **Implementación reactiva**: Uso de programación reactiva en todas las capas de la aplicación.
+
+## Diagrama de Arquitectura
+
+```mermaid
+flowchart TB
+    subgraph Client ["Cliente"]
+        direction TB
+        Frontend["Frontend / Cliente HTTP"]
+    end
+
+    subgraph API ["API REST Reactiva"]
+        direction TB
+        subgraph Controllers ["Controladores"]
+            AC["AuthController"]
+            TC["TareaController"]
+        end
+
+        subgraph Security ["Seguridad"]
+            SF["Filtros de Seguridad"]
+            JWT["JWT Service"]
+            AM["Authentication Manager"]
+        end
+
+        subgraph Services ["Servicios"]
+            AS["AuthService"]
+            TS["TareaService"]
+        end
+
+        subgraph Exception ["Manejo de Excepciones"]
+            GEH["GlobalExceptionHandler"]
+        end
+
+        subgraph Repository ["Repositorios"]
+            UR["UsuarioRepository"]
+            TR["TareaRepository"]
+            ETR["EstadoTareaRepository"]
+        end
+
+        subgraph Config ["Configuración"]
+            SC["SecurityConfig"]
+            CC["CorsConfig"]
+            OAPIC["OpenApiConfig"]
+            R2C["R2dbcConfig"]
+        end
+    end
+
+    subgraph DB ["Base de Datos"]
+        H2["H2 Database"]
+    end
+
+    subgraph Documentation ["Documentación"]
+        Swagger["Swagger UI / OpenAPI"]
+    end
+
+    %% Conexiones
+    Frontend <--> AC & TC
+    AC --> AS
+    TC --> TS
+    AS --> JWT
+    TS --> UR & TR & ETR
+    TR & UR & ETR <--> H2
+    SF --> JWT & AM
+    AC & TC --> GEH
+    
+    %% Flujo de seguridad
+    Frontend -- "1. Solicitud con JWT" --> SF
+    SF -- "2. Validar token" --> JWT
+    JWT -- "3. Token validado" --> SF
+    SF -- "4. Solicitud autorizada" --> TC
+    TC -- "5. Respuesta" --> Frontend
+    
+    %% Configuración
+    SC --> SF
+    CC --> API
+    R2C --> Repository
+    OAPIC --> Swagger
+    
+    %% Documentación
+    Frontend -- "Consulta" --> Swagger
+
+```
+
+## Diagrama de Componentes
+
+```mermaid
+graph TB
+    subgraph "Capa de Presentación"
+        Controllers["Controllers (REST API)"]
+        subgraph "Controladores"
+            AuthController["AuthController"]
+            TareaController["TareaController"]
+        end
+    end
+
+    subgraph "Capa de Servicio"
+        Services["Servicios"]
+        subgraph "Servicios Principales"
+            AuthService["AuthService"]
+            TareaService["TareaService"]
+            JwtService["JwtService"]
+        end
+    end
+
+    subgraph "Capa de Repositorio"
+        Repositories["Repositorios"]
+        subgraph "Repositorios R2DBC"
+            UsuarioRepository["UsuarioRepository"]
+            TareaRepository["TareaRepository"]
+            EstadoTareaRepository["EstadoTareaRepository"]
+        end
+    end
+
+    subgraph "Capa de Configuración"
+        Config["Configuración"]
+        subgraph "Componentes de Config"
+            SecurityConfig["SecurityConfig"]
+            AuthenticationManager["AuthenticationManager"]
+            ReactiveUserDetails["ReactiveUserDetailsService"]
+            R2dbcConfig["R2dbcConfig"]
+            OpenApiConfig["OpenApiConfig"]
+        end
+    end
+
+    subgraph "Capa de Modelo"
+        DTOs["Data Transfer Objects"]
+        Entities["Entidades"]
+        subgraph "DTOs"
+            LoginRequest["LoginRequest/Response"]
+            TareaRequest["TareaRequest/Response"]
+            EstadoTareaResponse["EstadoTareaResponse"]
+            ErrorResponse["ErrorResponse"]
+        end
+        subgraph "Entidades"
+            Usuario["Usuario"]
+            Tarea["Tarea"]
+            EstadoTarea["EstadoTarea"]
+        end
+    end
+
+    subgraph "Excepciones"
+        Exceptions["Manejador de Excepciones"]
+        subgraph "Excepciones Personalizadas"
+            GEH["GlobalExceptionHandler"]
+            TareaNotFoundException["TareaNotFoundException"]
+        end
+    end
+
+    subgraph "Base de Datos"
+        H2["H2 Database (dev)"]
+    end
+
+    %% Relaciones entre componentes
+    Controllers --> Services
+    Services --> Repositories
+    Repositories --> H2
+    Services --> Entities
+    Controllers --> DTOs
+    Services --> DTOs
+    DTOs <--> Entities
+
+    %% Relaciones específicas
+    AuthController --> AuthService
+    TareaController --> TareaService
+    TareaController --> JwtService
+    AuthService --> JwtService
+    AuthService --> UsuarioRepository
+    TareaService --> TareaRepository
+    TareaService --> UsuarioRepository
+    TareaService --> EstadoTareaRepository
+    SecurityConfig --> AuthenticationManager
+    AuthenticationManager --> JwtService
+    AuthenticationManager --> ReactiveUserDetails
+    ReactiveUserDetails --> UsuarioRepository
+    Controllers --> GEH
+
+
+```

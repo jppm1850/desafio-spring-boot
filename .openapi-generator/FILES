@@ -1,0 +1,10 @@
+src/main/java/com/spa/api/ApiUtil.java
+src/main/java/com/spa/api/AutenticacionApi.java
+src/main/java/com/spa/api/TareasApi.java
+src/main/java/com/spa/model/dto/ErrorResponse.java
+src/main/java/com/spa/model/dto/EstadoTareaResponse.java
+src/main/java/com/spa/model/dto/LoginRequest.java
+src/main/java/com/spa/model/dto/LoginResponse.java
+src/main/java/com/spa/model/dto/TareaRequest.java
+src/main/java/com/spa/model/dto/TareaResponse.java
+src/main/java/com/spa/model/dto/UsuarioResponse.java

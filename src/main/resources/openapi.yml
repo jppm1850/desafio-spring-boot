@@ -1,0 +1,377 @@
+openapi: 3.0.3
+info:
+  title: API Reactiva de Gestión de Tareas - NUEVO SPA
+  description: API reactiva para la gestión de tareas y usuarios con autenticación JWT
+  version: 1.0.0
+  contact:
+    name: NUEVO SPA
+servers:
+  - url: http://localhost:8080
+    description: Servidor de desarrollo local
+
+tags:
+  - name: autenticacion
+    description: Operaciones de autenticación
+  - name: tareas
+    description: Operaciones con tareas
+  - name: usuarios
+    description: Operaciones con usuarios
+
+paths:
+  /api/auth/login:
+    post:
+      tags:
+        - autenticacion
+      summary: Autenticar usuario
+      description: Autentica a un usuario y devuelve un token JWT
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Autenticación exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Credenciales inválidas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/tareas:
+    get:
+      tags:
+        - tareas
+      summary: Listar todas las tareas
+      description: Obtiene la lista de todas las tareas del usuario autenticado
+      operationId: listarTareas
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de tareas obtenida correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TareaResponse'
+        '401':
+          description: No autorizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+        - tareas
+      summary: Crear una nueva tarea
+      description: Crea una nueva tarea para el usuario autenticado
+      operationId: crearTarea
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TareaRequest'
+      responses:
+        '201':
+          description: Tarea creada correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TareaResponse'
+        '400':
+          description: Datos inválidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: No autorizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/tareas/{id}:
+    get:
+      tags:
+        - tareas
+      summary: Obtener una tarea por ID
+      description: Obtiene los detalles de una tarea específica
+      operationId: obtenerTarea
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: ID de la tarea
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Tarea encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TareaResponse'
+        '404':
+          description: Tarea no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: No autorizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      tags:
+        - tareas
+      summary: Actualizar una tarea
+      description: Actualiza los datos de una tarea existente
+      operationId: actualizarTarea
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: ID de la tarea
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TareaRequest'
+      responses:
+        '200':
+          description: Tarea actualizada correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TareaResponse'
+        '400':
+          description: Datos inválidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Tarea no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: No autorizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+        - tareas
+      summary: Eliminar una tarea
+      description: Elimina una tarea existente
+      operationId: eliminarTarea
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: ID de la tarea
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Tarea eliminada correctamente
+        '404':
+          description: Tarea no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: No autorizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/estados:
+    get:
+      tags:
+        - tareas
+      summary: Listar todos los estados de tarea
+      description: Obtiene la lista de todos los estados posibles para las tareas
+      operationId: listarEstados
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de estados obtenida correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EstadoTareaResponse'
+        '401':
+          description: No autorizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    LoginRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          example: "usuario1"
+        password:
+          type: string
+          format: password
+          example: "password123"
+
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        username:
+          type: string
+          example: "usuario1"
+        userId:
+          type: integer
+          format: int64
+          example: 1
+
+    TareaRequest:
+      type: object
+      required:
+        - titulo
+        - descripcion
+        - estadoId
+      properties:
+        titulo:
+          type: string
+          example: "Implementar API"
+        descripcion:
+          type: string
+          example: "Crear endpoints RESTful para el servicio"
+        fechaVencimiento:
+          type: string
+          format: date
+          example: "2025-05-15"
+        estadoId:
+          type: integer
+          format: int64
+          example: 1
+
+    TareaResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        titulo:
+          type: string
+          example: "Implementar API"
+        descripcion:
+          type: string
+          example: "Crear endpoints RESTful para el servicio"
+        fechaCreacion:
+          type: string
+          format: date-time
+          example: "2025-03-21T14:30:00Z"
+        fechaVencimiento:
+          type: string
+          format: date
+          example: "2025-05-15"
+        estado:
+          $ref: '#/components/schemas/EstadoTareaResponse'
+        usuario:
+          $ref: '#/components/schemas/UsuarioResponse'
+
+    EstadoTareaResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        nombre:
+          type: string
+          example: "PENDIENTE"
+
+    UsuarioResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        username:
+          type: string
+          example: "usuario1"
+        nombre:
+          type: string
+          example: "Juan Pérez"
+        email:
+          type: string
+          format: email
+          example: "juan.perez@nuevospa.com"
+
+    ErrorResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          example: "2025-03-21T14:30:00Z"
+        status:
+          type: integer
+          example: 400
+        error:
+          type: string
+          example: "Bad Request"
+        message:
+          type: string
+          example: "Datos inválidos"
+        path:
+          type: string
+          example: "/api/tareas"
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

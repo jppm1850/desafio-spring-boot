@@ -1,0 +1,246 @@
+{
+  "info": {
+    "_postman_id": "7a5e0c2e-f8db-4d54-9c7a-4a1c2a3e9d7f",
+    "name": "Gestión de Tareas - NUEVO SPA",
+    "description": "Colección para probar la API de Gestión de Tareas de NUEVO SPA",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Autenticación",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"admin\",\n    \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Endpoint para la autenticación de usuarios"
+          },
+          "response": []
+        }
+      ],
+      "description": "Operaciones relacionadas con la autenticación"
+    },
+    {
+      "name": "Tareas",
+      "item": [
+        {
+          "name": "Listar Tareas",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/tareas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "tareas"
+              ]
+            },
+            "description": "Obtiene todas las tareas del usuario autenticado"
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener Tarea por ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/tareas/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "tareas",
+                "1"
+              ]
+            },
+            "description": "Obtiene una tarea específica por su ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Crear Tarea",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"titulo\": \"Implementar API\",\n    \"descripcion\": \"Crear endpoints RESTful para el servicio\",\n    \"fechaVencimiento\": \"2025-05-15\",\n    \"estadoId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/tareas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "tareas"
+              ]
+            },
+            "description": "Crea una nueva tarea"
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar Tarea",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"titulo\": \"Implementar API - Actualizado\",\n    \"descripcion\": \"Crear endpoints RESTful para el servicio - Versión 2\",\n    \"fechaVencimiento\": \"2025-06-15\",\n    \"estadoId\": 2\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/tareas/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "tareas",
+                "1"
+              ]
+            },
+            "description": "Actualiza una tarea existente"
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar Tarea",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/tareas/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "tareas",
+                "1"
+              ]
+            },
+            "description": "Elimina una tarea existente"
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Estados",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/estados",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "estados"
+              ]
+            },
+            "description": "Obtiene todos los estados posibles para las tareas"
+          },
+          "response": []
+        }
+      ],
+      "description": "Operaciones relacionadas con la gestión de tareas"
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....",
+      "type": "string"
+    }
+  ]
+}
